@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Grade Calculator</title> <!-- Title Updated -->
+  <style>
+    /* (Styles remain unchanged) */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      color: #fff;
+    }
+
+    header {
+      background-color: #1a1a2e;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
+    nav {
+      background-color: #16213e;
+      display: flex;
+      justify-content: center;
+      padding: 15px 0;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 30px;
+      font-size: 18px;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #00f2fe;
+    }
+
+    section {
+      display: none;
+      padding: 30px 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .subject-list li {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .calculator label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    .calculator input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .calculator button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 10px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .calculator button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f4f4f4;
+      border-radius: 10px;
+      color: #000;
+    }
+
+    h2 {
+      color: #fff;
+      border-bottom: 2px solid #00f2fe;
+      padding-bottom: 5px;
+    }
+
+    .back-btn {
+      margin-top: 20px;
+      background-color: #e74c3c;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .back-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Student Grade Calculator</h1> <!-- Heading Updated -->
+  </header>
+
+  <nav>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('subjects')">Subjects</a>
+    <a href="#" onclick="showSection('calculator')">Grade</a>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="home" class="active">
+    <h2>Welcome</h2>
+    <p>This application helps you evaluate your academic performance by entering your subject marks. Navigate through the menu to view subjects and calculate your results.</p>
+  </section>
+
+  <!-- Subjects Section -->
+  <section id="subjects">
+    <h2>Subjects & Full Forms</h2>
+    <ul class="subject-list">
+      <li><strong>OS</strong> – Operating Systems</li>
+      <li><strong>DBMS</strong> – Database Management System</li>
+      <li><strong>DAA</strong> – Design and Analysis of Algorithms</li>
+      <li><strong>PNS</strong> – Probability and Statistics</li>
+      <li><strong>ADM</strong> – Application of Data Mining</li>
+    </ul>
+  </section>
+
+  <!-- Calculator Section -->
+  <section id="calculator">
+    <h2>Enter Marks</h2>
+    <div class="calculator">
+      <label for="os">Operating Systems</label>
+      <input type="number" id="os" min="0" max="100" />
+
+      <label for="dbms">Database Management System</label>
+      <input type="number" id="dbms" min="0" max="100" />
+
+      <label for="daa">Design and Analysis of Algorithms</label>
+      <input type="number" id="daa" min="0" max="100" />
+
+      <label for="pns">Probability and Statistics</label>
+      <input type="number" id="pns" min="0" max="100" />
+
+      <label for="adm">Application of Data Mining</label>
+      <input type="number" id="adm" min="0" max="100" />
+
+      <button onclick="calculateResults()">Calculate</button>
+
+      <div class="result" id="result"></div>
+
+      <div class="back-btn" onclick="showSection('home')">Back to Home</div>
+    </div>
+  </section>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+      document.getElementById('result').innerHTML = ''; // Clear previous result
+    }
+
+    function calculateResults() {
+      const os = parseFloat(document.getElementById('os').value) || 0;
+      const dbms = parseFloat(document.getElementById('dbms').value) || 0;
+      const daa = parseFloat(document.getElementById('daa').value) || 0;
+      const pns = parseFloat(document.getElementById('pns').value) || 0;
+      const adm = parseFloat(document.getElementById('adm').value) || 0;
+
+      const total = os + dbms + daa + pns + adm;
+      const average = total / 5;
+
+      let grade = '';
+      if (average >= 90) grade = 'A+';
+      else if (average >= 80) grade = 'A';
+      else if (average >= 70) grade = 'B';
+      else if (average >= 60) grade = 'C';
+      else if (average >= 50) grade = 'D';
+      else grade = 'F';
+
+      document.getElementById('result').innerHTML = `
+        <p><strong>Total Marks:</strong> ${total}/500</p>
+        <p><strong>Average Percentage:</strong> ${average.toFixed(2)}%</p>
+        <p><strong>Grade:</strong> ${grade}</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
