@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Number Game</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #e6ffed; /* Light green background */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-box {
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      border: 2px solid #2d6a4f; /* Dark green border */
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .title-row h2 {
+      margin: 0;
+      font-size: 26px;
+      color: #1b4332;
+    }
+
+    .title-row img {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+    }
+
+    input[type="number"] {
+      padding: 8px;
+      width: 80px;
+      font-size: 16px;
+      border: 1px solid #2d6a4f;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 8px 15px;
+      margin: 10px;
+      font-size: 16px;
+      background-color: #40916c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2d6a4f;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #d00000;
+    }
+
+    .scoreboard {
+      margin-top: 25px;
+      color: #2a2a2a;
+    }
+
+    .scoreboard h3 {
+      margin-bottom: 10px;
+      color: #1b4332;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-box">
+    <div class="title-row">
+      <h2>Number Game</h2>
+      <img src="https://img.freepik.com/free-vector/question-mark-concept-illustration_114360-4913.jpg?w=740" alt="Question Cartoon">
+    </div>
+
+    <p>Guess the number between 1 and 100. You have <strong>7</strong> attempts.</p>
+
+    <input type="number" id="guessInput" min="1" max="100" />
+    <button onclick="submitGuess()">Guess</button>
+    <p class="result" id="resultMsg"></p>
+
+    <button onclick="startNewRound()" id="newRoundBtn" style="display: none;">Play Again</button>
+
+    <div class="scoreboard">
+      <h3>Scoreboard</h3>
+      <p>Rounds Played: <span id="rounds">0</span></p>
+      <p>Rounds Won: <span id="won">0</span></p>
+      <p>Rounds Lost: <span id="lost">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    let target, attempts, maxAttempts = 7;
+    let rounds = 0, won = 0, lost = 0;
+
+    function startNewRound() {
+      target = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      document.getElementById("resultMsg").textContent = "";
+      document.getElementById("guessInput").value = "";
+      document.getElementById("guessInput").disabled = false;
+      document.querySelector("button[onclick='submitGuess()']").disabled = false;
+      document.getElementById("newRoundBtn").style.display = "none";
+      rounds++;
+      updateScoreboard();
+    }
+
+    function submitGuess() {
+      const guess = Number(document.getElementById("guessInput").value);
+      if (!guess || guess < 1 || guess > 100) {
+        document.getElementById("resultMsg").textContent = "Enter a number between 1 and 100.";
+        return;
+      }
+
+      attempts++;
+
+      if (guess === target) {
+        document.getElementById("resultMsg").textContent = `Correct! You guessed it in ${attempts} attempt(s).`;
+        won++;
+        endRound();
+      } else if (attempts >= maxAttempts) {
+        document.getElementById("resultMsg").textContent = `Out of attempts! The number was ${target}.`;
+        lost++;
+        endRound();
+      } else if (guess < target) {
+        document.getElementById("resultMsg").textContent = `Too low! Attempts left: ${maxAttempts - attempts}`;
+      } else {
+        document.getElementById("resultMsg").textContent = `Too high! Attempts left: ${maxAttempts - attempts}`;
+      }
+
+      updateScoreboard();
+    }
+
+    function endRound() {
+      document.getElementById("guessInput").disabled = true;
+      document.querySelector("button[onclick='submitGuess()']").disabled = true;
+      document.getElementById("newRoundBtn").style.display = "inline-block";
+    }
+
+    function updateScoreboard() {
+      document.getElementById("rounds").textContent = rounds;
+      document.getElementById("won").textContent = won;
+      document.getElementById("lost").textContent = lost;
+    }
+
+    startNewRound();
+  </script>
+
+</body>
+</html>
